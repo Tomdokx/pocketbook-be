@@ -40,7 +40,7 @@ public class User {
     @Column
     private LocalDate update_date;
 
-    @OneToMany(mappedBy = "Author")
+    @OneToMany(mappedBy = "author")
     @JsonManagedReference
     private Set<Task> tasks = new HashSet<>();
 

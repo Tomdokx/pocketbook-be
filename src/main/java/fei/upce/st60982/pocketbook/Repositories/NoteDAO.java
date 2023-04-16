@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface NoteDAO extends JpaRepository<Note, Long> {
     Note findNoteById(long id);
-    List<Note> findByOwner(User user);
-    List<Note> findByAssignment(Task task);
+    List<Note> findNotesByOwner(User user);
+    List<Note> findNotesByAssignment(Task task);
 }

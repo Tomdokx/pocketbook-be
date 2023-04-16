@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TaskDAO extends JpaRepository<Task, Long> {
     Task findTaskById(long id);
-    List<Task> findByAuthor(User user);
+    List<Task> findTasksByAuthor(User user);
 }

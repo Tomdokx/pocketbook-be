@@ -35,7 +35,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name="app_user_id", nullable=false)
     @JsonBackReference
-    private User Author;
+    private User author;
 
     @OneToMany(mappedBy = "assignment")
     @JsonManagedReference
