@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: pocketbookPostgres
+      POSTGRES_USER: st60982
+      POSTGRES_PASSWORD: st60982
+    ports:
+      - 5432:5432
