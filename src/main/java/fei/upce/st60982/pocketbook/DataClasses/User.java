@@ -36,6 +36,10 @@ public class User {
     @Column
     private boolean active;
     @Column
+    private boolean deleted;
+    @Column
+    private LocalDate deleted_date;
+    @Column
     private LocalDate creation_date;
     @Column
     private LocalDate update_date;

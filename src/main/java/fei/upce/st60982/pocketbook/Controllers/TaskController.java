@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,6 +28,11 @@ public class TaskController {
     private NoteDAO noteRepository;
 
     @GetMapping("/tasks")
+    public List<Task> getTasks() {
+        return taskRepository.findAll().stream().filter(p->!p.isDeleted()).toList();
+    }
+
+    @GetMapping("/tasks/all")
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
@@ -34,7 +40,7 @@ public class TaskController {
     @GetMapping("/task/{id}")
     public Task getTaskById(@PathVariable(value="id") final long id){
         Task task = taskRepository.findTaskById(id);
-        if(task == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        if(task == null || task.isDeleted()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         return task;
     }
 
@@ -45,7 +51,10 @@ public class TaskController {
 
     @GetMapping(value={"/task/deleteTask/{id}"})
     public void deteleTask(@PathVariable(value="id") final long id){
-        taskRepository.deleteById(id);
+        Task t = taskRepository.findTaskById(id);
+        t.setDeleted(true);
+        t.setDeleted_date(LocalDate.now());
+        taskRepository.save(t);
     }
 
     @GetMapping(value={"/task/updateTask/{id}"})
@@ -57,9 +66,23 @@ public class TaskController {
         t.setAuthor(task.getAuthor());
         t.setNotes(task.getNotes());
         t.setDeleted(task.isDeleted());
-        t.setDeleted_date(task.getDeleted_date());
+        if(t.isDeleted())
+            t.setDeleted_date(task.getDeleted_date());
         t.setCreation_date(task.getCreation_date());
         t.setUpdate_date(task.getUpdate_date());
         taskRepository.save(t);
+    }
+
+    @GetMapping("/task/byAuthor/{id}")
+    public List<Task> getTaskByAuthorId(@PathVariable(value="id") final long id){
+        User user = userRepository.findUserById(id);
+        List<Task> l = taskRepository.findTasksByAuthor(user);
+        return l.stream().filter(p -> !p.isDeleted()).toList();
+    }
+
+    @GetMapping("/task/byAuthor")
+    public List<Task> getTaskByAuthor(@RequestBody User user){
+        List<Task> l = taskRepository.findTasksByAuthor(user);
+        return l.stream().filter(p -> !p.isDeleted()).toList();
     }
 }

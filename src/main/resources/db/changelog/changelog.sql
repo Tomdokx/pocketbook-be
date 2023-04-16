@@ -4,6 +4,8 @@ CREATE TABLE app_user (
    username varchar(255) ,
    password varchar(255) ,
    active BOOL,
+   deleted BOOL,
+   deleted_date DATE,
    creation_date DATE,
    update_date DATE
 );

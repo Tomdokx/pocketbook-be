@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,6 +29,12 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    public List<User> getUsers() {
+        List<User> l = userRepository.findAll();
+        return l.stream().filter(p -> !p.isDeleted()).toList();
+    }
+
+    @GetMapping("/users/all")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -35,7 +42,7 @@ public class UserController {
     @GetMapping("/user/{id}")
     public User getUserById(@PathVariable(value="id") final long id){
         User user = userRepository.findUserById(id);
-        if(user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        if(user == null || user.isDeleted()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         return user;
     }
 
@@ -46,7 +53,10 @@ public class UserController {
 
     @GetMapping(value={"/user/deleteUser/{id}"})
     public void deleteUser(@PathVariable(value="id") final long id){
-        userRepository.deleteById(id);
+        User u = userRepository.findUserById(id);
+        u.setDeleted(true);
+        u.setDeleted_date(LocalDate.now());
+        userRepository.save(u);
     }
 
     @GetMapping(value={"/user/updateUser/{id}"})
@@ -55,13 +65,12 @@ public class UserController {
         u.setUsername(user.getUsername());
         u.setPassword(user.getPassword());
         u.setActive(user.isActive());
+        u.setDeleted(user.isDeleted());
+        if(u.isDeleted())
+            u.setDeleted_date(user.getDeleted_date());
         u.setCreation_date(user.getCreation_date());
         u.setUpdate_date(user.getUpdate_date());
         userRepository.save(u);
     }
 
-    @GetMapping("/error")
-    public String ErrorPage(){
-        return "Something went wrong..";
-    }
 }
