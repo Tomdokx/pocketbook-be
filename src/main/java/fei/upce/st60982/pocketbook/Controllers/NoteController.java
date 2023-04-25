@@ -82,7 +82,7 @@ public class NoteController {
     }
 
     @GetMapping("/note/byOwner")
-    public List<Note> getTasksByOwner(@RequestBody User user){
+    public List<Note> getNotesByOwner(@RequestBody User user){
         List<Note> l = noteRepository.findNotesByOwner(user);
         return l.stream().filter(p -> !p.isDeleted()).toList();
     }
@@ -95,7 +95,7 @@ public class NoteController {
     }
 
     @GetMapping("/note/byAssignment")
-    public List<Note> getTasksByAssignment(@RequestBody Task task){
+    public List<Note> getNotesByAssignment(@RequestBody Task task){
         List<Note> l = noteRepository.findNotesByAssignment(task);
         return l.stream().filter(p -> !p.isDeleted()).toList();
     }

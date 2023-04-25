@@ -3,6 +3,7 @@ package fei.upce.st60982.pocketbook.Services;
 import fei.upce.st60982.pocketbook.DataClasses.User;
 import fei.upce.st60982.pocketbook.Repositories.UserDAO;
 import fei.upce.st60982.pocketbook.Services.Interfaces.UserServiceInter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ public class UserService implements UserServiceInter {
 
     private final UserDAO userRepository;
 
+    @Autowired
     public UserService(UserDAO userRepository) {
         this.userRepository = userRepository;
     }
