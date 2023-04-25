@@ -2,7 +2,7 @@ package fei.upce.st60982.pocketbook.DataClasses;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

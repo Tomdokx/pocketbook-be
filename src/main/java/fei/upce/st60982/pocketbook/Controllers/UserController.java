@@ -2,7 +2,7 @@ package fei.upce.st60982.pocketbook.Controllers;
 
 import fei.upce.st60982.pocketbook.DataClasses.User;
 import fei.upce.st60982.pocketbook.Repositories.UserDAO;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
