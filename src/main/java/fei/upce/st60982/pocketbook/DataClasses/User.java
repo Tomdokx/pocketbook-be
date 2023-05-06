@@ -36,6 +36,8 @@ public class User {
     @Column
     private boolean active;
     @Column
+    private boolean admin_role;
+    @Column
     private boolean deleted;
     @Column
     private LocalDate deleted_date;

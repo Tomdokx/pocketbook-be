@@ -3,37 +3,46 @@ package fei.upce.st60982.pocketbook.Controllers;
 import fei.upce.st60982.pocketbook.DataClasses.User;
 import fei.upce.st60982.pocketbook.Repositories.UserDAO;
 import javax.validation.Valid;
+
+import fei.upce.st60982.pocketbook.Security.LoginModel;
+import fei.upce.st60982.pocketbook.Security.SignInData;
+import fei.upce.st60982.pocketbook.Services.UserService;
+import fei.upce.st60982.pocketbook.Services.UserSingInService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true,level= AccessLevel.PRIVATE)
 @RestController
 public class UserController {
 
+    private UserSingInService userService;
+
     private UserDAO userRepository;
 
-    @GetMapping("/hello")
-    public String helloWorld() {
-        return "Hello World!";
+    @PostMapping("/authenticate")
+    public LoginModel login(@RequestBody SignInData signInData){
+        String token = userService.signIn(signInData.getUsername(),signInData.getPassword());
+        User user = userRepository.findByUsername(signInData.getUsername());
+        LoginModel lm = new LoginModel(token,user);
+        return lm;
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.OPTIONS, RequestMethod.GET, RequestMethod.POST})
     @GetMapping("/users")
     public List<User> getUsers() {
         List<User> l = userRepository.findAll();
         return l.stream().filter(p -> !p.isDeleted()).toList();
-    }
 
+    }
     @GetMapping("/users/all")
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -44,6 +53,16 @@ public class UserController {
         User user = userRepository.findUserById(id);
         if(user == null || user.isDeleted()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         return user;
+    }
+
+    @GetMapping("/user/logged/{username}/{password}")
+    public User getUserByCredentials(@PathVariable(value="Username") final String username, @PathVariable(value="password") final String password){
+        List<User> users = userRepository.findAll();
+        for (User user: users) {
+            if(user.getUsername() == username && user.getPassword() == password)
+                return user;
+        }
+        return null;
     }
 
     @GetMapping("/user/addUser")
