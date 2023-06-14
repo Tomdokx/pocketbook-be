@@ -2,6 +2,18 @@
 
 <p>Welcome to the Pocketbook Backend Application! This project serves as the backend for the Pocketbook application, providing essential functionalities for managing user data, notes, and tasks. Below, you'll find a brief overview of each section in the README.</p>
 
+<h2>Settings</h2>
+
+<p>The Pocketbook Backend Application is configured with the following settings:</p>
+
+<ul>
+  <li><strong>Database:</strong> The application utilizes a PostgreSQL database running on port 5432. The database name is "pocketbookPostgres". This database stores the necessary data for user management, notes, and tasks.</li>
+  <li><strong>Application Port:</strong> The Pocketbook Backend Application runs on port 9000. This is the port where the application listens for incoming HTTP requests.</li>
+  <li><strong>Context Path:</strong> The application has a context path of "/api/v1". This is the base URL path that precedes all the API endpoints of the application.</li>
+</ul>
+
+<p>These settings ensure proper connectivity to the PostgreSQL database and provide the necessary configuration for accessing the application's resources through the specified port and context path. All of those can be changed with file <code>application.properties</code></p>
+
 <h2>Database Entity-relationship model</h2>
 <p>In this section, you'll find information about the database ERP model used in the Pocketbook Backend Application. It outlines the structure and relationships of the database tables, ensuring efficient storage and retrieval of data.</p>
 
