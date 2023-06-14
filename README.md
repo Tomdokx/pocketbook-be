@@ -3,8 +3,9 @@
 <p>Welcome to the Pocketbook Backend Application! This project serves as the backend for the Pocketbook application, providing essential functionalities for managing user data, notes, and tasks. Below, you'll find a brief overview of each section in the README.</p>
 
 <h2>Database Entity-relationship model</h2>
-
 <p>In this section, you'll find information about the database ERP model used in the Pocketbook Backend Application. It outlines the structure and relationships of the database tables, ensuring efficient storage and retrieval of data.</p>
+
+<img src="https://github.com/Tomdokx/pocketbook-be/blob/master/pocketbookerd.jpg" alt="pocketbook ER model">
 
 <h2>Controllers</h2>
 
