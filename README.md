@@ -57,6 +57,26 @@
 
 <h2>Project Structure</h2>
 
-<p>The Project Structure section provides an overview of the directory structure and organization of the Pocketbook Backend Application. It outlines the key directories and files within the project, helping you navigate and understand the codebase more effectively.</p>
+<p>The Pocketbook Backend Application follows a structured organization with the following folders:</p>
+
+<h4>Config</h4>
+<p>The <strong>Config</strong> folder contains custom configurations for date and other application settings. It provides a centralized location to manage and customize the application's behavior.</p>
+
+<h4>Controllers</h4>
+<p>The <strong>Controllers</strong> folder contains the user, task, and note controllers. These controllers handle the incoming HTTP requests, process the logic, and return the appropriate responses. They serve as the entry point for the REST API endpoints.</p>
+
+<h4>DataClasses</h4>
+<p>The <strong>DataClasses</strong> folder contains the classes responsible for modeling the data entities in the application, such as the User, Task, and Note classes. These classes define the structure and behavior of the data objects used throughout the application.</p>
+
+<h4>Repositories</h4>
+<p>The <strong>Repositories</strong> folder contains the DAOs (Data Access Objects) for each class. These repositories provide an abstraction layer to interact with the database and perform CRUD (Create, Read, Update, Delete) operations on the corresponding data entities.</p>
+
+<h4>Security</h4>
+<p>The <strong>Security</strong> folder houses all the classes related to JWT security implementation. It includes classes responsible for token generation, validation, and authentication. The security classes ensure the protection of sensitive data and provide secure access to the application's resources.</p>
+
+<h4>Services</h4>
+<p>The <strong>Services</strong> folder contains classes specifically dedicated to handling login-related functionalities. These services handle the authentication process, user login, and related operations to manage user sessions and security aspects.</p>
+
+<p>The organized project structure enhances maintainability, readability, and modularity of the Pocketbook Backend Application, making it easier to navigate, understand, and extend the codebase.</p>
 
 <p>Feel free to explore each section in detail to gain a comprehensive understanding of the Pocketbook Backend Application. If you have any questions or require further assistance, please don't hesitate to reach out. Happy coding!</p>
