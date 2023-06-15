@@ -1,5 +1,6 @@
 package fei.upce.st60982.pocketbook.Controllers;
 
+import fei.upce.st60982.pocketbook.DataClasses.Note;
 import fei.upce.st60982.pocketbook.DataClasses.Task;
 import fei.upce.st60982.pocketbook.DataClasses.User;
 import fei.upce.st60982.pocketbook.Repositories.NoteDAO;
@@ -10,15 +11,15 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.OPTIONS, RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true,level= AccessLevel.PRIVATE)
 @RestController
@@ -38,39 +39,49 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}")
-    public Task getTaskById(@PathVariable(value="id") final long id){
+    public Task getTaskById(@PathVariable(value="id") final int id){
         Task task = taskRepository.findTaskById(id);
-        if(task == null || task.isDeleted()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        if(task == null || task.isDeleted()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found");
         return task;
     }
 
-    @GetMapping("/task/addTask")
+    @PostMapping("/task/addTask")
     public void addTask(@RequestBody Task task){
         taskRepository.save(task);
     }
 
-    @GetMapping(value={"/task/deleteTask/{id}"})
-    public void deteleTask(@PathVariable(value="id") final long id){
+    @DeleteMapping(value={"/task/deleteTask/{id}"})
+    public void deteleTask(@PathVariable(value="id") final int id){
         Task t = taskRepository.findTaskById(id);
         t.setDeleted(true);
-        t.setDeleted_date(LocalDate.now());
+        t.setDeleted_date(LocalDateTime.now());
         taskRepository.save(t);
     }
 
-    @GetMapping(value={"/task/updateTask/{id}"})
+    @PutMapping(value={"/task/updateTask/{id}"})
     public void updateTask(@PathVariable(value="id") final int id, @Valid @RequestBody Task task){
         Task t = taskRepository.findTaskById(id);
         t.setDone(task.isDone());
         t.setDescription(task.getDescription());
         t.setTitle(task.getTitle());
-        t.setAuthor(task.getAuthor());
         t.setNotes(task.getNotes());
         t.setDeleted(task.isDeleted());
         if(t.isDeleted())
             t.setDeleted_date(task.getDeleted_date());
         t.setCreation_date(task.getCreation_date());
-        t.setUpdate_date(task.getUpdate_date());
+        t.setUpdate_date(LocalDateTime.now());
         taskRepository.save(t);
+    }
+
+    @GetMapping(value={"/task/doneChange/{id}"})
+    public boolean doneChangeTask(@PathVariable(value="id") final int id){
+        Task t = taskRepository.findTaskById(id);
+        if(t == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found");
+        else
+            t.setDone(!t.isDone());
+        taskRepository.save(t);
+        return true;
     }
 
     @GetMapping("/task/byAuthor/{id}")
@@ -84,5 +95,20 @@ public class TaskController {
     public List<Task> getTaskByAuthor(@RequestBody User user){
         List<Task> l = taskRepository.findTasksByAuthor(user);
         return l.stream().filter(p -> !p.isDeleted()).toList();
+    }
+    @PostMapping("task/addNote/{id}")
+    public ResponseEntity<Note> addNoteToTask(@PathVariable(value="id") final int id, @RequestBody Note note){
+        note.setCreation_date(LocalDateTime.now());
+        Task t = taskRepository.findTaskById(id);
+        if(t == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found");
+        note.setAssignment(t);
+        note.setUpdate_date(LocalDateTime.now());
+        Note n = noteRepository.save(note);
+        if (n == null) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        } else {
+            return new ResponseEntity<>(n, HttpStatus.CREATED);
+        }
     }
 }

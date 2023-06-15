@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface NoteDAO extends JpaRepository<Note, Long> {
-    Note findNoteById(long id);
+public interface NoteDAO extends JpaRepository<Note, Integer> {
+    Note findNoteById(int id);
     List<Note> findNotesByOwner(User user);
     List<Note> findNotesByAssignment(Task task);
 }

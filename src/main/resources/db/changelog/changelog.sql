@@ -6,7 +6,7 @@ CREATE TABLE app_user (
    active BOOL,
    admin_role BOOL,
    deleted BOOL,
-   deleted_date DATE,
-   creation_date DATE,
-   update_date DATE
+   deleted_date timestamp,
+   creation_date timestamp,
+   update_date timestamp
 );

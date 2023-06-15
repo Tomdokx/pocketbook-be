@@ -4,9 +4,9 @@ CREATE TABLE note (
    title varchar(255),
    content text,
    deleted BOOL,
-   deleted_date DATE,
-   creation_date DATE,
-   update_date DATE,
+   deleted_date timestamp,
+   creation_date timestamp,
+   update_date timestamp,
    app_user_id INT REFERENCES app_user(id),
    task_id INT REFERENCES task(id)
 );
